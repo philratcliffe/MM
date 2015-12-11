@@ -1,27 +1,19 @@
 import random
+from get_indicators import get_indicators
 
 colours = ['orange', 'red', 'green', 'black', 'white', 'yellow']
 
 def main():
 
     code = generate_code()
-    guess = get_guess()
-    indicators = get_indicators(code, guess)
 
-    print "Your guess: {}".format(guess)
-    print "The code: {}".format(code)
-    print "The indicators: {}".format(indicators)
-
-def get_indicators(code, guess):
-    indicators = [0, 0, 0, 0]
-    for i, g in enumerate(guess):
-        if g in code:
-            indicators[i] = 1
-            if guess[i] == code[i]:
-                indicators[i] = 2
-
-    return indicators
-
+    for _ in range(10):
+        guess = get_guess()
+        indicators = get_indicators(code, guess)
+        print "Your guess: {} indicators: {}".format(guess, indicators)
+        if code == guess:
+            print "Well done the code is {}".format(code)
+            break
 
 def generate_code():
     return random.sample(colours, 4)
@@ -30,9 +22,7 @@ def generate_code():
 def get_guess():
     guess_str = raw_input("make guess: ")
     guess_raw = [c.strip() for c in guess_str.split(',')]
-    print guess_raw
     guess = fix_guess_raw(guess_raw)
-    print guess
     return guess
 
 def fix_guess_raw(guess_raw):

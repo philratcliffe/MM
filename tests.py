@@ -1,8 +1,8 @@
 import unittest
 
-from check_guess import check_guess
+from get_indicators import get_indicators
 
-class TestCheckGuess(unittest.TestCase):
+class TestGetIndicators(unittest.TestCase):
 
     def setUp(self):
         pass
@@ -11,14 +11,14 @@ class TestCheckGuess(unittest.TestCase):
         a = ['r', 'g', 'b', 'o']
         g = ['y', 'v', 't', 'w']
 
-        r = check_guess(g, a)
+        r = get_indicators(g, a)
         self.assertListEqual(r, [0, 0, 0, 0])
 
     def test_case_one_exact_matche(self):
         a = ['r', 'g', 'b', 'o']
         g = ['r', 'v', 't', 'w']
 
-        r = check_guess(g, a)
+        r = get_indicators(g, a)
         self.assertListEqual(r, [2, 0, 0, 0])
 
 
@@ -26,7 +26,7 @@ class TestCheckGuess(unittest.TestCase):
         a = ['r', 'g', 'b', 'o']
         g = ['r', 'g', 'b', 'o']
 
-        r = check_guess(g, a)
+        r = get_indicators(g, a)
         self.assertListEqual(r, [2, 2, 2, 2])
 
 
