@@ -10,7 +10,7 @@ def main():
     for _ in range(10):
         guess = get_guess()
         indicators = get_indicators(code, guess)
-        print "Your guess: {} indicators: {}".format(guess, indicators)
+        print "Your guess: {} indicators: {} code {}".format(guess, indicators, code)
         if code == guess:
             print "Well done the code is {}".format(code)
             break
