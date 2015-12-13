@@ -2,24 +2,19 @@
 def get_indicators(guess, code):
     '''Indicate how close guess is to code'''
 
-    d = {c: 0 for c in guess}
-    print "dict {}".format(d)
+    ind = [0, 0, 0, 0]
 
-    for i, c in enumerate(guess):
-        state = d.get(c)
-        if state == 2:
-            # Already found this colour in the right location
+    for i, c in enumerate(code):
+        if c not in guess:
             continue
 
-        if c in code:
-            if state == 0:
-                # Right colour
-                d[c] = 1
-            if guess[i] == code[i]:
-                # Right colour, right location
-                d[c] = 2
+        if guess[i] == code[i]:
+            ind[i] = 2
+            continue
 
-    res = list(d.values())
-    [res.append(0) for _ in range(4 - len(d))]
-    return res
+
+        if code.count(c) == 1:
+            ind[i] = 1
+
+    return sorted(ind, reverse=True)
 
