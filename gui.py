@@ -68,7 +68,7 @@ class Board(object):
 
 class Button(object):
 
-    def __init__(x, y, colour, screen):
+    def __init__(self, x, y, colour, screen):
         pygame.draw.circle(screen, colour, [x, y], 20)
 
 
@@ -89,7 +89,7 @@ quit_game = False
 screen.fill(white)
 board = Board()
 x_start = 100
-button(x_start, 500, red, board)
+red_button = Button(x_start, 500, red, screen)
 button(x_start + 50, 500, blue, board)
 button(x_start + 100, 500, green, board)
 button(x_start + 150, 500, red, board)
