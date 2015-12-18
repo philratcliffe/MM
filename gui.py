@@ -1,4 +1,5 @@
 import pygame
+from pygame.locals import MOUSEBUTTONDOWN
 
 # Colours
 white = pygame.Color(255, 255, 255)
@@ -6,6 +7,8 @@ black = pygame.Color(0, 0, 0)
 red = pygame.Color(255, 0, 0)
 blue = pygame.Color(0, 0, 255)
 green = pygame.Color(0, 255, 0)
+yellow = pygame.Color(255, 255, 0)
+purple = pygame.Color(160, 32, 240)
 
 pygame.init()
 
@@ -13,16 +16,14 @@ screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("Mastermind")
 clock = pygame.time.Clock()
 
-class Guess(object):
+class Row(object):
 
-    def __init__(self):
+    def __init__(self, guess):
         self.guess = []
+        self.indicator = self.get_indicator()
 
-    def add_colour(self, colour):
-        self.guess.append(colour)
-
-    def get_guess(self):
-        return self.guess
+    def get_indicator(self, guess):
+        pass
 
 class Board(object):
 
@@ -30,29 +31,34 @@ class Board(object):
         self.x_start = 200
         self.y_start = 50
         self.row_count = 0
-        self.current_guess = []
+        self._current_guess = []
         self.rows = []
+        self.MAX_GUESS = 4
+
+    @property
+    def current_guess(self):
+        return self._current_guess
 
     def add_guess(self, colour):
-        self.current_guess.append(colour)
+        self._current_guess.append(colour)
 
     def add_row(self):
-        self.rows.append(self.current_guess)
-        self.current_guess = []
+        self.rows.append(self._current_guess)
+        self._current_guess = []
         self.row_count += 1
 
     def display_rows(self):
-        for i, row in self.rows:
+        for i, row in enumerate(self.rows):
             self.display_row(row, i)
 
     def display_row(self, row, count):
         y = self.y_start + count * 50
-        for i, colour in enumerate(row):
+        for i, colour in enumerate(row, 1):
             x = self.x_start + i * 50
             pygame.draw.circle(screen, colour, [x, y], 20)
 
     def display_current_guess(self):
-        self.display_row(self.current_guess, self.row_count)
+        self.display_row(self._current_guess, self.row_count)
 
     def draw_board(self):
         self.display_rows()
@@ -60,7 +66,7 @@ class Board(object):
 
     def draw_empty_board(self):
         colour = black
-        for i in range(1, 8):
+        for i in range(0, 8):
             y = self.y_start + i * 50
             for j in range(1, 5):
                 x = self.x_start + j * 50
@@ -69,8 +75,20 @@ class Board(object):
 class Button(object):
 
     def __init__(self, x, y, colour, screen):
+        self.x = x
+        self.y = y
         pygame.draw.circle(screen, colour, [x, y], 20)
 
+    def pressed(self):
+        cur = pygame.mouse.get_pos()
+        click = pygame.mouse.get_pressed()
+        if click[0]:
+            if self.x + 20 > cur[0] > self.x - 20:
+                if self.y + 20 > cur[1] > self.y - 20:
+                    if click[0]:
+                        return True
+
+        return False
 
 def button(x, y, colour, board):
     pygame.draw.circle(screen, colour, [x, y], 20)
@@ -88,24 +106,37 @@ quit_game = False
 
 screen.fill(white)
 board = Board()
+board.draw_empty_board()
 x_start = 100
 red_button = Button(x_start, 500, red, screen)
-button(x_start + 50, 500, blue, board)
-button(x_start + 100, 500, green, board)
-button(x_start + 150, 500, red, board)
-button(x_start + 150, 500, black, board)
-
+blue_button = Button(x_start + 50, 500, blue, screen)
+yellow_button = Button(x_start + 100, 500, yellow, screen)
+purple_button = Button(x_start + 150, 500, purple, screen)
+add_row_button = Button(x_start + 400, 500, green, screen)
 
 while not quit_game:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             quit_game = True
+        elif event.type == MOUSEBUTTONDOWN and \
+                len(board.current_guess) < board.MAX_GUESS:
+            if red_button.pressed():
+                board.add_guess(red)
+            elif blue_button.pressed():
+                board.add_guess(blue)
+            elif yellow_button.pressed():
+                board.add_guess(yellow)
+            elif purple_button.pressed():
+                board.add_guess(purple)
 
-    board.draw_empty_board()
-    board.draw_board()
-
+        elif event.type == MOUSEBUTTONDOWN and \
+                len(board.current_guess) == board.MAX_GUESS:
+            if add_row_button.pressed():
+                board.add_row()
 
     pygame.display.update()
+    board.draw_board()
 
 pygame.quit()
+
 
