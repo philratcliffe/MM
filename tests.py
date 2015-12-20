@@ -62,7 +62,6 @@ class TestGetIndicators(unittest.TestCase):
         self.assertTrue(r.count(2) == 1)
         self.assertTrue(r.count(0) == 3)
 
-
     def test_case_bug_1(self):
         c = [6, 3, 1, 2]
         g = [1, 6, 1, 6]
@@ -80,8 +79,7 @@ class TestGetIndicators(unittest.TestCase):
         g = [2, 2, 2, 2]
 
         r = get_indicators(g, c)
-        self.assertTrue(r.count(2) == 1)
-        self.assertTrue(r.count(0) == 3)
+        self.assertListEqual(r, [2, 0, 0, 0])
 
     def test_case_bug_3(self):
         c = [3, 3, 1, 2]
@@ -90,12 +88,5 @@ class TestGetIndicators(unittest.TestCase):
         r = get_indicators(g, c)
         self.assertListEqual(r, [1, 1, 1, 0])
 
-
-
-
-
 if __name__ == '__main__':
     unittest.main()
-
-
-

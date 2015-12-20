@@ -164,6 +164,8 @@ while not quit_game:
                 board.add_guess(yellow)
             elif purple_button.pressed():
                 board.add_guess(purple)
+            elif orange_button.pressed():
+                board.add_guess(orange)
 
         elif event.type == MOUSEBUTTONDOWN and \
                 len(board.current_guess) == board.MAX_GUESS:
